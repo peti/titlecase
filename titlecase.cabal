@@ -17,6 +17,7 @@ library
   exposed-modules:     Data.Text.Titlecase
                      , Data.Text.Titlecase.Internal
   build-depends:       base >=4.7 && <4.8
+                     , blaze-markup
                      , semigroups
                      , text
 

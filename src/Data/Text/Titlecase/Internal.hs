@@ -16,10 +16,15 @@ import           Data.Foldable       (elem)
 import           Data.List.NonEmpty
 import           Data.Semigroup
 import           Data.Text
+import           Text.Blaze
 
 -- * Types
 
 newtype Titlecase = Titlecase { unTitlecase :: Text } deriving (Eq, Show)
+
+instance ToMarkup Titlecase where
+  toMarkup           (Titlecase t) = toMarkup t
+  preEscapedToMarkup (Titlecase t) = preEscapedToMarkup t
 
 newtype Article = Article { unArticle :: Text } deriving (Eq, Show)
 
