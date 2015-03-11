@@ -5,6 +5,8 @@ license:             BSD3
 license-file:        LICENSE
 author:              Nikita Karetnikov
 maintainer:          nikita@karetnikov.org
+homepage:            https://github.com/nkaretnikov/titlecase
+bug-reports:         https://github.com/nkaretnikov/titlecase/issues
 copyright:           2015 Nikita Karetnikov
 category:            Text
 build-type:          Simple
