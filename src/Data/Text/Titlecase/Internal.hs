@@ -12,10 +12,11 @@ module Data.Text.Titlecase.Internal where
 
 import           Prelude             (Eq, Show, Bool, ($), (.), uncurry)
 import           Control.Applicative
+import qualified Data.Char           as Char
 import           Data.Foldable       (elem)
 import           Data.List.NonEmpty  hiding (unwords)
 import           Data.Semigroup
-import           Data.Text
+import           Data.Text           hiding (toTitle)
 import           Text.Blaze
 
 -- * Types
@@ -38,6 +39,13 @@ data Preposition = OneWordPreposition   Text
 
 
 -- * Helpers
+
+-- | Capitalize the first character.  Note that this function behaves
+-- differently than 'Data.Text.toTitle'.
+toTitle :: Text -> Text
+toTitle t = pack $ case unpack t of
+  ""     -> ""
+  (x:xs) -> Char.toUpper x : xs
 
 (<#>) :: Text -> Text -> Text
 x <#> "" = x

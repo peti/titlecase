@@ -9,7 +9,7 @@ module Data.Text.Titlecase
 
 import           Prelude                      (Int, ($), (==), (||), (&&), succ, otherwise)
 import qualified Data.List                    as List
-import           Data.Text
+import           Data.Text                    hiding (toTitle)
 import           Data.Text.Titlecase.Internal
 
 -- | Capitalize all words except 'articles' (a, an, the), coordinating
