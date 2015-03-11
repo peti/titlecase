@@ -35,25 +35,28 @@ titlecase t = Titlecase $ go 1 ws
     parse4 i a b c d tt =
       if isFourWordPreposition a b c d
       then if | isFirst i && List.null tt
-                          -> space [toTitle a, b, c, toTitle d]
-              | isFirst i -> space [toTitle a, b, c,         d] <#> go (succ i) tt
-              | otherwise -> space [        a, b, c,         d] <#> go (succ i) tt
+                             -> space [toTitle a, b, c, toTitle d]
+              | isFirst   i  -> space [toTitle a, b, c,         d] <#> go (succ i) tt
+              | List.null tt -> space [        a, b, c, toTitle d]
+              | otherwise    -> space [        a, b, c,         d] <#> go (succ i) tt
       else parse3 i a b c (d:tt)
 
     parse3 i a b c tt =
       if isThreeWordPreposition a b c
       then if | isFirst i && List.null tt
-                          -> space [toTitle a, b, toTitle c]
-              | isFirst i -> space [toTitle a, b,         c] <#> go (succ i) tt
-              | otherwise -> space [        a, b,         c] <#> go (succ i) tt
+                             -> space [toTitle a, b, toTitle c]
+              | isFirst   i  -> space [toTitle a, b,         c] <#> go (succ i) tt
+              | List.null tt -> space [        a, b, toTitle c]
+              | otherwise    -> space [        a, b,         c] <#> go (succ i) tt
       else parse2 i a b (c:tt)
 
     parse2 i a b tt =
       if isTwoWordPreposition a b
       then if | isFirst i && List.null tt
-                          -> space [toTitle a, toTitle b]
-              | isFirst i -> space [toTitle a,         b] <#> go (succ i) tt
-              | otherwise -> space [        a,         b] <#> go (succ i) tt
+                             -> space [toTitle a, toTitle b]
+              | isFirst   i  -> space [toTitle a,         b] <#> go (succ i) tt
+              | List.null tt -> space [        a, toTitle b]
+              | otherwise    -> space [        a,         b] <#> go (succ i) tt
       else parse1 i a (b:tt)
 
     parse1 i a tt =
