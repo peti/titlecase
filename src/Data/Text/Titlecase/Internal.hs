@@ -1,6 +1,13 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | As the name implies, this module is meant to be used only if
+-- you want to get access to the internals, say, if you're unhappy
+-- with the provided 'Data.Text.Titlecase.titlecase' function.
+-- "Data.Text.Titlecase.Internal" doesn't prevent you from creating
+-- improperly capitalized 'Titlecase' values.  In any other case,
+-- "Data.Text.Titlecase" is what you're looking for.
+
 module Data.Text.Titlecase.Internal where
 
 import           Prelude             (Eq, Show, Bool, ($), (.), uncurry)
@@ -10,13 +17,7 @@ import           Data.List.NonEmpty
 import           Data.Semigroup
 import           Data.Text
 
--- | As the name implies, this module is meant to be used only if
--- you want to get access to the internals, say, if you're unhappy
--- with the provided 'titlecase' function.  It doesn't prevent you
--- from creating improperly capitalized 'Titlecase' values.
--- Otherwise, 'Data.Text.Titlecase' is what you're looking for.
-
--- | Types.
+-- * Types
 
 newtype Titlecase = Titlecase { unTitlecase :: Text } deriving (Eq, Show)
 
@@ -31,7 +32,7 @@ data Preposition = OneWordPreposition   Text
                  deriving (Eq, Show)
 
 
--- | Helpers.
+-- * Helpers
 
 (<#>) :: Text -> Text -> Text
 x <#> "" = x
@@ -70,7 +71,7 @@ unPreposition p = case p of
   FourWordPreposition  a b c d -> space [a, b, c, d]
 
 
--- | Words that are capitalized only when they start or end a title.
+-- * Words that are capitalized only when they start or end a title
 
 articles :: NonEmpty Article
 articles = Article <$> fromList ["a", "an", "the"]

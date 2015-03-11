@@ -12,10 +12,10 @@ import qualified Data.List                    as List
 import           Data.Text
 import           Data.Text.Titlecase.Internal
 
--- | Capitalize all words except articles (a, an, the), coordinating
--- conjunctions (for, and, nor, but, or, yet, so), and prepositions
--- (unless they begin the title).  The prepositions are taken from
--- this list:
+-- | Capitalize all words except 'articles' (a, an, the), coordinating
+-- 'conjunctions' (for, and, nor, but, or, yet, so), and
+-- 'prepositions' (unless they begin the title).  The 'prepositions'
+-- are taken from this list:
 -- <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
 titlecase :: Text -> Titlecase
 titlecase t = Titlecase $ go 1 ws
