@@ -14,8 +14,8 @@ import           Data.Text.Titlecase.Internal
 
 -- | Capitalize all words except 'articles' (a, an, the), coordinating
 -- 'conjunctions' (for, and, nor, but, or, yet, so), and
--- 'prepositions' (unless they begin the title).  The 'prepositions'
--- are taken from this list:
+-- 'prepositions' (unless they begin or end the title).  The
+-- 'prepositions' are taken from this list:
 -- <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
 titlecase :: Text -> Titlecase
 titlecase t = Titlecase $ go 1 ws
