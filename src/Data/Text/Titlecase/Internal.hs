@@ -13,7 +13,7 @@ module Data.Text.Titlecase.Internal where
 import           Prelude             (Eq, Show, Bool, ($), (.), uncurry)
 import           Control.Applicative
 import           Data.Foldable       (elem)
-import           Data.List.NonEmpty
+import           Data.List.NonEmpty  hiding (unwords)
 import           Data.Semigroup
 import           Data.Text
 import           Text.Blaze
@@ -43,9 +43,6 @@ data Preposition = OneWordPreposition   Text
 x <#> "" = x
 x <#> y  = x <> " " <> y
 
-space :: [Text] -> Text
-space = intercalate " "
-
 uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
 uncurry3 f (a,b,c) = f a b c
 
@@ -64,16 +61,16 @@ isFourWordPreposition  :: Text -> Text -> Text -> Text -> Bool
 isArticle                      = isElem unArticle     articles
 isConjunction                  = isElem unConjunction conjunctions
 isOneWordPreposition           = isElem unPreposition oneWordPrepositions
-isTwoWordPreposition   a b     = isElem unPreposition twoWordPrepositions   $ space [a, b]
-isThreeWordPreposition a b c   = isElem unPreposition threeWordPrepositions $ space [a, b, c]
-isFourWordPreposition  a b c d = isElem unPreposition fourWordPrepositions  $ space [a, b, c, d]
+isTwoWordPreposition   a b     = isElem unPreposition twoWordPrepositions   $ unwords [a, b]
+isThreeWordPreposition a b c   = isElem unPreposition threeWordPrepositions $ unwords [a, b, c]
+isFourWordPreposition  a b c d = isElem unPreposition fourWordPrepositions  $ unwords [a, b, c, d]
 
 unPreposition :: Preposition -> Text
 unPreposition p = case p of
   OneWordPreposition   a       -> a
-  TwoWordPreposition   a b     -> space [a, b]
-  ThreeWordPreposition a b c   -> space [a, b, c]
-  FourWordPreposition  a b c d -> space [a, b, c, d]
+  TwoWordPreposition   a b     -> unwords [a, b]
+  ThreeWordPreposition a b c   -> unwords [a, b, c]
+  FourWordPreposition  a b c d -> unwords [a, b, c, d]
 
 
 -- * Words that are capitalized only when they start or end a title

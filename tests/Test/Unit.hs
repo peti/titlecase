@@ -28,12 +28,12 @@ testTitlecase, testFirst, testLast, testIgnored :: Text -> Assertion
 testTitlecase t = titlecase (toLower t) @?= Titlecase t
 
 toTitleFirst :: Text -> Text
-toTitleFirst t = space $ case words t of
+toTitleFirst t = unwords $ case words t of
   []     -> []
   (x:xs) -> toTitle x : xs
 
 toTitleLast :: Text -> Text
-toTitleLast t = space $ go $ words t
+toTitleLast t = unwords $ go $ words t
   where
     go []     = []
     go [x]    = [toTitle x]
