@@ -17,6 +17,11 @@ description:         Capitalize all English words except articles (a, an, the),
                      prepositions are taken from this list:
                      <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
 
+extra-source-files:
+  .gitignore
+  shell.nix
+  tests/Test/*.hs
+
 source-repository head
   type:     git
   location: https://github.com/nkaretnikov/titlecase
