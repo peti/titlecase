@@ -10,9 +10,9 @@ copyright:           2015 Nikita Karetnikov
 category:            Text
 build-type:          Simple
 cabal-version:       >=1.10
-synopsis:            Convert words to title case
-description:         Capitalize all words except articles (a, an, the), coordinating
-                     conjunctions (for, and, nor, but, or, yet, so), and
+synopsis:            Convert English words to title case
+description:         Capitalize all English words except articles (a, an, the),
+                     coordinating conjunctions (for, and, nor, but, or, yet, so), and
                      prepositions (unless they begin or end the title).  The
                      prepositions are taken from this list:
                      <https://en.wikipedia.org/wiki/List_of_English_prepositions>.

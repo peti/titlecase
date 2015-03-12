@@ -12,8 +12,8 @@ import qualified Data.List                    as List
 import           Data.Text                    hiding (toTitle)
 import           Data.Text.Titlecase.Internal
 
--- | Capitalize all words except 'articles' (a, an, the), coordinating
--- 'conjunctions' (for, and, nor, but, or, yet, so), and
+-- | Capitalize all English words except 'articles' (a, an, the),
+-- coordinating 'conjunctions' (for, and, nor, but, or, yet, so), and
 -- 'prepositions' (unless they begin or end the title).  The
 -- 'prepositions' are taken from this list:
 -- <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
