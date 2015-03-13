@@ -20,7 +20,6 @@ description:         Capitalize all English words except articles (a, an, the),
 extra-source-files:
   .gitignore
   shell.nix
-  tests/Test/*.hs
 
 source-repository head
   type:     git
@@ -43,6 +42,8 @@ test-suite test
   hs-source-dirs:      tests
   main-is:             Test.hs
   ghc-options:         -Wall
+  other-modules:       Test.Property
+                     , Test.Unit
   build-depends:       base >=4.7 && <4.8
                      , semigroups
                      , tasty
