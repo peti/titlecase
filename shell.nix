@@ -4,7 +4,7 @@ let pkg = haskellngPackages.callPackage
              , stdenv, text, tasty, tasty-hunit, tasty-quickcheck }:
              mkDerivation {
                pname = "titlecase";
-               version = "0.1.0.0";
+               version = "0.1.0.1";
                src = ./.;
                buildDepends = [ base blaze-markup semigroups text ];
                testDepends = [
