@@ -118,6 +118,11 @@ oneWordPrepositions = OneWordPreposition <$> fromList
   , "qua"
   , "regarding", "round"
   , "sans", "save", "since", "than", "through"
+  , "throughout", "thruout", "till", "times",
+  , "to", "toward", "towards", "under", "underneath",
+  , "unlike", "until", "unto", "up", "upon", "versus", "vs.", "vs", "v."
+  , "via", "vice", "vis-à-vis", "w/", "within", "w/in", "w/i", "without"
+  , "w/o", "worth"
   ]
 
 twoWordPrepositions :: NonEmpty Preposition
