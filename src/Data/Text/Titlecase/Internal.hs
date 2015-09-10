@@ -97,13 +97,17 @@ prepositions
   <> threeWordPrepositions
   <> fourWordPrepositions
 
+-- | The words to not capitalize below come from Wikipedia
+-- primarily, https://en.wikipedia.org/wiki/List_of_English_prepositions
+-- but removing subordinating conjunctions generally
+-- see https://en.wikipedia.org/wiki/Conjunction_%28grammar%29#Subordinating_conjunctions
 oneWordPrepositions :: NonEmpty Preposition
 oneWordPrepositions = OneWordPreposition <$> fromList
   [ "a", "abaft", "abeam", "aboard", "about", "above", "absent", "across"
-  , "afore", "after", "against", "along", "alongside", "amid", "amidst"
-  , "among", "amongst", "an", "anenst", "apropos", "apud", "around", "as"
+  , "afore", "against", "along", "alongside", "amid", "amidst"
+  , "among", "amongst", "an", "anenst", "apropos", "apud", "around",
   , "aside", "astride", "at", "athwart", "atop"
-  , "barring", "before", "behind", "below", "beneath", "beside", "besides"
+  , "barring", "behind", "below", "beneath", "beside", "besides"
   , "between", "beyond", "but", "by"
   , "chez", "circa", "concerning", "considering"
   , "despite", "down", "during"
@@ -117,10 +121,10 @@ oneWordPrepositions = OneWordPreposition <$> fromList
   , "pace", "past", "per", "plus", "pro"
   , "qua"
   , "regarding", "round"
-  , "sans", "save", "since", "than", "through"
-  , "throughout", "thruout", "till", "times",
+  , "sans", "save", "through"
+  , "throughout", "till", "times",
   , "to", "toward", "towards", "under", "underneath",
-  , "unlike", "until", "unto", "up", "upon", "versus", "vs.", "vs", "v."
+  , "unlike", "unto", "up", "upon", "versus", "vs.", "vs", "v."
   , "via", "vice", "vis-à-vis", "w/", "within", "w/in", "w/i", "without"
   , "w/o", "worth"
   ]
@@ -130,7 +134,7 @@ twoWordPrepositions = uncurry TwoWordPreposition <$> fromList
   [ ("according", "to"), ("ahead", "of"), ("apart", "from"), ("as", "for")
   , ("as", "of"), ("as", "per"), ("as", "regards"), ("aside", "from")
   , ("astern", "of")
-  , ("back", "to"), ("because", "of")
+  , ("back", "to"),
   , ("close", "to")
   , ("due", "to")
   , ("except", "for")
@@ -149,8 +153,8 @@ twoWordPrepositions = uncurry TwoWordPreposition <$> fromList
 
 threeWordPrepositions :: NonEmpty Preposition
 threeWordPrepositions = uncurry3 ThreeWordPreposition <$> fromList
-  [ ("as", "far", "as"), ("as", "long", "as"), ("as", "opposed", "to")
-  , ("as", "soon", "as"), ("as", "well", "as")
+  [ ("as", "opposed", "to")
+  , ("as", "well", "as")
   , ("by", "means", "of"), ("by", "virtue", "of")
   , ("in", "accordance", "with"), ("in", "addition", "to")
   , ("in", "case", "of"), ("in", "front", "of"), ("in", "lieu", "of")
