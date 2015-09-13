@@ -105,7 +105,7 @@ oneWordPrepositions :: NonEmpty Preposition
 oneWordPrepositions = OneWordPreposition <$> fromList
   [ "a", "abaft", "abeam", "aboard", "about", "above", "absent", "across"
   , "afore", "against", "along", "alongside", "amid", "amidst"
-  , "among", "amongst", "an", "anenst", "apropos", "apud", "around",
+  , "among", "amongst", "an", "anenst", "apropos", "apud", "around"
   , "aside", "astride", "at", "athwart", "atop"
   , "barring", "behind", "below", "beneath", "beside", "besides"
   , "between", "beyond", "but", "by"
@@ -122,8 +122,8 @@ oneWordPrepositions = OneWordPreposition <$> fromList
   , "qua"
   , "regarding", "round"
   , "sans", "save", "through"
-  , "throughout", "till", "times",
-  , "to", "toward", "towards", "under", "underneath",
+  , "throughout", "till", "times"
+  , "to", "toward", "towards", "under", "underneath"
   , "unlike", "unto", "up", "upon", "versus", "vs.", "vs", "v."
   , "via", "vice", "vis-à-vis", "w/", "within", "w/in", "w/i", "without"
   , "w/o", "worth"
@@ -134,7 +134,7 @@ twoWordPrepositions = uncurry TwoWordPreposition <$> fromList
   [ ("according", "to"), ("ahead", "of"), ("apart", "from"), ("as", "for")
   , ("as", "of"), ("as", "per"), ("as", "regards"), ("aside", "from")
   , ("astern", "of")
-  , ("back", "to"),
+  , ("back", "to")
   , ("close", "to")
   , ("due", "to")
   , ("except", "for")
