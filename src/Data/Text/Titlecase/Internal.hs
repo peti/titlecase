@@ -97,10 +97,11 @@ prepositions
   <> threeWordPrepositions
   <> fourWordPrepositions
 
--- | The words to not capitalize below come from Wikipedia
--- primarily, https://en.wikipedia.org/wiki/List_of_English_prepositions
--- but removing subordinating conjunctions generally
--- see https://en.wikipedia.org/wiki/Conjunction_%28grammar%29#Subordinating_conjunctions
+-- | The words to not capitalize come from
+-- <https://en.wikipedia.org/wiki/List_of_English_prepositions Wikipedia primarily>,
+-- but removing
+-- <https://en.wikipedia.org/wiki/Conjunction_%28grammar%29#Subordinating_conjunctions subordinating conjunctions>
+-- generally.
 oneWordPrepositions :: NonEmpty Preposition
 oneWordPrepositions = OneWordPreposition <$> fromList
   [ "a", "abaft", "abeam", "aboard", "about", "above", "absent", "across"
