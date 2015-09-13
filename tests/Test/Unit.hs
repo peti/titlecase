@@ -41,7 +41,7 @@ toTitleLast t = unwords $ go $ words t
 
 testFirst   t = testTitlecase $ toTitleFirst t <#> "Is First, so It Is Capitalized"
 testLast    t = testTitlecase $ "This Sentence Capitalizes" <#> toTitleLast t
-testIgnored t = testTitlecase $ "This Sentence Keeps" <#> t <#> "as Is"
+testIgnored t = testTitlecase $ "This Sentence Keeps" <#> t <#> "As Is"
 
 articleFirst, articleLast, articleIgnored :: TestTree
 articleFirst   = testCase "article is first"   $ mapM_ (testFirst   . unArticle) Titlecase.articles
