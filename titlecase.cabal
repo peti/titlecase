@@ -19,7 +19,9 @@ description:         Capitalize all English words except articles (a, an, the),
 
 extra-source-files:
   .gitignore
+  README.md
   shell.nix
+  stack.yaml
 
 source-repository head
   type:     git
