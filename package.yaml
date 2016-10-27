@@ -17,11 +17,12 @@ description:    Capitalize all English words except articles (a, an, the),
                 prepositions (unless they begin or end the title).  The
                 prepositions are taken from
                 <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
-ghc-options:            -Wall
+ghc-options:    -Wall
 
 dependencies:
   - base <5
   - blaze-markup
+  - semigroups
   - text
 
 library:

@@ -32,6 +32,7 @@ library
   build-depends:
     base <5,
     blaze-markup,
+    semigroups,
     text
   exposed-modules:
     Data.Text.Titlecase
@@ -46,6 +47,7 @@ executable titlecase
   build-depends:
     base <5,
     blaze-markup,
+    semigroups,
     text,
     titlecase
 
@@ -58,6 +60,7 @@ test-suite test
   build-depends:
     base <5,
     blaze-markup,
+    semigroups,
     text,
     titlecase,
     tasty,
