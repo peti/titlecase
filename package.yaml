@@ -11,7 +11,7 @@ license-file:   LICENSE
 github:         peti/titlecase
 category:       Text
 stability:      stable
-tested-with:    GHC > 7 && < 8.1
+tested-with:    GHC > 7.6 && < 8.1
 description:    Capitalize all English words except articles (a, an, the),
                 coordinating conjunctions (for, and, nor, but, or, yet, so), and
                 prepositions (unless they begin or end the title).  The
