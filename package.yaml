@@ -1,0 +1,47 @@
+name:           titlecase
+version:        0.1.0.3
+synopsis:       Convert English words to title case
+author:
+  - Nikita Karetnikov
+  - Peter Simons
+  - Aaron Wolf
+maintainer:     Peter Simons <simons@cryp.to>
+license:        BSD3
+license-file:   LICENSE
+github:         peti/titlecase
+category:       Text
+stability:      stable
+tested-with:    GHC > 7 && < 8.1
+description:    Capitalize all English words except articles (a, an, the),
+                coordinating conjunctions (for, and, nor, but, or, yet, so), and
+                prepositions (unless they begin or end the title).  The
+                prepositions are taken from
+                <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
+ghc-options:            -Wall
+
+dependencies:
+  - base <5
+  - blaze-markup
+  - text
+
+library:
+  source-dirs:          src
+  exposed-modules:
+    - Data.Text.Titlecase
+    - Data.Text.Titlecase.Internal
+
+executables:
+  titlecase:
+    main:               Main.hs
+    dependencies:
+      - titlecase
+
+tests:
+  test:
+    main:               Test.hs
+    source-dirs:        tests
+    dependencies:
+      - titlecase
+      - tasty
+      - tasty-hunit
+      - tasty-quickcheck
