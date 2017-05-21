@@ -1,16 +1,12 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
+module Unit where
 
-module Test.Unit where
-
-import           Prelude                      (($), (.))
-import           Data.Foldable                (mapM_)
-import           Data.Text                    hiding (toTitle)
-import           Data.Text.Titlecase
-import           Data.Text.Titlecase.Internal hiding (articles, conjunctions, prepositions)
+import Data.Text.Titlecase
 import qualified Data.Text.Titlecase.Internal as Titlecase
-import           Test.Tasty
-import           Test.Tasty.HUnit
+import Data.Text.Titlecase.Internal hiding (articles, conjunctions, prepositions)
+
+import Test.Tasty
+import Test.Tasty.HUnit
+import Data.Char ( toLower )
 
 tests :: TestTree
 tests = testGroup "Unit tests" [articles, conjunctions, prepositions]
@@ -24,15 +20,15 @@ conjunctions = testGroup "Conjunctions" [conjunctionFirst, conjunctionLast, conj
 prepositions :: TestTree
 prepositions = testGroup "Prepositions" [prepositionFirst, prepositionLast, prepositionIgnored]
 
-testTitlecase, testFirst, testLast, testIgnored :: Text -> Assertion
-testTitlecase t = titlecase (toLower t) @?= Titlecase t
+testTitlecase, testFirst, testLast, testIgnored :: String -> Assertion
+testTitlecase t = titlecase (map toLower t) @?= t
 
-toTitleFirst :: Text -> Text
+toTitleFirst :: String -> String
 toTitleFirst t = unwords $ case words t of
   []     -> []
   (x:xs) -> toTitle x : xs
 
-toTitleLast :: Text -> Text
+toTitleLast :: String -> String
 toTitleLast t = unwords $ go $ words t
   where
     go []     = []

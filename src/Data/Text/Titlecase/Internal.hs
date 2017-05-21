@@ -1,109 +1,71 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-
--- | As the name implies, this module is meant to be used only if
--- you want to get access to the internals, say, if you're unhappy
--- with the provided 'Data.Text.Titlecase.titlecase' function.
--- "Data.Text.Titlecase.Internal" doesn't prevent you from creating
--- improperly capitalized 'Titlecase' values.  In any other case,
--- "Data.Text.Titlecase" is what you're looking for.
+-- | As the name implies, this module is meant to be used only if you want to
+-- get access to the internals, say, if you're unhappy with the provided
+-- 'Data.Text.Titlecase.titlecase' function.
 
 module Data.Text.Titlecase.Internal where
 
-import           Prelude             (Eq, Show, Bool, ($), (.), uncurry)
-import           Control.Applicative
-import qualified Data.Char           as Char
-import           Data.Foldable       (elem)
-import           Data.List.NonEmpty  hiding (unwords)
-import           Data.Semigroup
-import           Data.Text           hiding (toTitle)
-import           Text.Blaze
+import Data.Char ( toLower, toUpper )
 
--- * Types
+-- * Articles
 
-newtype Titlecase = Titlecase { unTitlecase :: Text } deriving (Eq, Show)
+newtype Article = Article { unArticle :: String } deriving (Eq, Show)
 
-instance ToMarkup Titlecase where
-  toMarkup           (Titlecase t) = toMarkup t
-  preEscapedToMarkup (Titlecase t) = preEscapedToMarkup t
+isArticle :: String -> Bool
+isArticle = isElem unArticle articles
 
-newtype Article = Article { unArticle :: Text } deriving (Eq, Show)
+articles :: [Article]
+articles = Article <$> ["a", "an", "the"]
 
-newtype Conjunction = Conjunction { unConjunction :: Text } deriving (Eq, Show)
+-- * Conjunctions
 
-data Preposition = OneWordPreposition   Text
-                 | TwoWordPreposition   Text Text
-                 | ThreeWordPreposition Text Text Text
-                 | FourWordPreposition  Text Text Text Text
+newtype Conjunction = Conjunction { unConjunction :: String } deriving (Eq, Show)
+
+conjunctions :: [Conjunction]
+conjunctions = Conjunction <$> ["for", "and", "nor", "but", "or", "yet", "so"]
+
+isConjunction :: String -> Bool
+isConjunction = isElem unConjunction conjunctions
+
+-- * Prepositions
+
+data Preposition = OneWordPreposition   String
+                 | TwoWordPreposition   String String
+                 | ThreeWordPreposition String String String
+                 | FourWordPreposition  String String String String
                  deriving (Eq, Show)
 
+-- | The words come from
+-- <https://en.wikipedia.org/wiki/List_of_English_prepositions Wikipedia>
+-- but without <https://en.wikipedia.org/wiki/Conjunction_%28grammar%29#Subordinating_conjunctions subordinating conjunctions>.
 
--- * Helpers
+prepositions :: [Preposition]
+prepositions
+   = oneWordPrepositions
+  ++ twoWordPrepositions
+  ++ threeWordPrepositions
+  ++ fourWordPrepositions
 
--- | Capitalize the first character.  Note that this function behaves
--- differently than 'Data.Text.toTitle'.
-toTitle :: Text -> Text
-toTitle t = pack $ case unpack t of
-  ""     -> ""
-  (x:xs) -> Char.toUpper x : xs
-
-(<#>) :: Text -> Text -> Text
-x <#> "" = x
-x <#> y  = x <> " " <> y
-
-uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
-uncurry3 f (a,b,c) = f a b c
-
-uncurry4 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
-uncurry4 f (a,b,c,d) = f a b c d
-
-isElem :: (a -> Text) -> NonEmpty a -> Text -> Bool
-isElem f xs = (`elem` (f <$> xs)) . toLower
-
-isArticle, isConjunction,
-  isOneWordPreposition :: Text -> Bool
-isTwoWordPreposition   :: Text -> Text -> Bool
-isThreeWordPreposition :: Text -> Text -> Text -> Bool
-isFourWordPreposition  :: Text -> Text -> Text -> Text -> Bool
-
-isArticle                      = isElem unArticle     articles
-isConjunction                  = isElem unConjunction conjunctions
-isOneWordPreposition           = isElem unPreposition oneWordPrepositions
-isTwoWordPreposition   a b     = isElem unPreposition twoWordPrepositions   $ unwords [a, b]
-isThreeWordPreposition a b c   = isElem unPreposition threeWordPrepositions $ unwords [a, b, c]
-isFourWordPreposition  a b c d = isElem unPreposition fourWordPrepositions  $ unwords [a, b, c, d]
-
-unPreposition :: Preposition -> Text
+unPreposition :: Preposition -> String
 unPreposition p = case p of
   OneWordPreposition   a       -> a
   TwoWordPreposition   a b     -> unwords [a, b]
   ThreeWordPreposition a b c   -> unwords [a, b, c]
   FourWordPreposition  a b c d -> unwords [a, b, c, d]
 
+isOneWordPreposition   :: String -> Bool
+isOneWordPreposition = isElem unPreposition oneWordPrepositions
 
--- * Words that are capitalized only when they start or end a title
+isTwoWordPreposition   :: String -> String -> Bool
+isTwoWordPreposition a b = isElem unPreposition twoWordPrepositions $ unwords [a, b]
 
-articles :: NonEmpty Article
-articles = Article <$> fromList ["a", "an", "the"]
+isThreeWordPreposition :: String -> String -> String -> Bool
+isThreeWordPreposition a b c = isElem unPreposition threeWordPrepositions $ unwords [a, b, c]
 
-conjunctions :: NonEmpty Conjunction
-conjunctions = Conjunction <$> fromList
-  ["for", "and", "nor", "but", "or", "yet", "so"]
+isFourWordPreposition  :: String -> String -> String -> String -> Bool
+isFourWordPreposition a b c d = isElem unPreposition fourWordPrepositions $ unwords [a, b, c, d]
 
-prepositions :: NonEmpty Preposition
-prepositions
-   = oneWordPrepositions
-  <> twoWordPrepositions
-  <> threeWordPrepositions
-  <> fourWordPrepositions
-
--- | The words to not capitalize come from
--- <https://en.wikipedia.org/wiki/List_of_English_prepositions Wikipedia primarily>,
--- but removing
--- <https://en.wikipedia.org/wiki/Conjunction_%28grammar%29#Subordinating_conjunctions subordinating conjunctions>
--- generally.
-oneWordPrepositions :: NonEmpty Preposition
-oneWordPrepositions = OneWordPreposition <$> fromList
+oneWordPrepositions :: [Preposition]
+oneWordPrepositions = OneWordPreposition <$>
   [ "a", "abaft", "abeam", "aboard", "about", "above", "absent", "across"
   , "afore", "against", "along", "alongside", "amid", "amidst"
   , "among", "amongst", "an", "anenst", "apropos", "apud", "around"
@@ -130,8 +92,8 @@ oneWordPrepositions = OneWordPreposition <$> fromList
   , "w/o", "worth"
   ]
 
-twoWordPrepositions :: NonEmpty Preposition
-twoWordPrepositions = uncurry TwoWordPreposition <$> fromList
+twoWordPrepositions :: [Preposition]
+twoWordPrepositions = uncurry TwoWordPreposition <$>
   [ ("according", "to"), ("ahead", "of"), ("apart", "from"), ("as", "for")
   , ("as", "of"), ("as", "per"), ("as", "regards"), ("aside", "from")
   , ("astern", "of")
@@ -152,8 +114,8 @@ twoWordPrepositions = uncurry TwoWordPreposition <$> fromList
   , ("up", "to")
   ]
 
-threeWordPrepositions :: NonEmpty Preposition
-threeWordPrepositions = uncurry3 ThreeWordPreposition <$> fromList
+threeWordPrepositions :: [Preposition]
+threeWordPrepositions = uncurry3 ThreeWordPreposition <$>
   [ ("as", "opposed", "to")
   , ("as", "well", "as")
   , ("by", "means", "of"), ("by", "virtue", "of")
@@ -165,9 +127,30 @@ threeWordPrepositions = uncurry3 ThreeWordPreposition <$> fromList
   , ("with", "regard", "to"), ("with", "respect", "to")
   ]
 
-fourWordPrepositions :: NonEmpty Preposition
-fourWordPrepositions = uncurry4 FourWordPreposition <$> fromList
+fourWordPrepositions :: [Preposition]
+fourWordPrepositions = uncurry4 FourWordPreposition <$>
   [ ("at", "the", "behest", "of")
   , ("for", "the", "sake", "of")
   , ("with", "a", "view", "to")
   ]
+
+-- * Helper functions
+
+-- | Capitalize the first character of a string.
+
+toTitle :: String -> String
+toTitle "" = ""
+toTitle (x:xs) = toUpper x : xs
+
+(<#>) :: String -> String -> String
+x <#> "" = x
+x <#> y  = x ++ " " ++ y
+
+uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry3 f (a,b,c) = f a b c
+
+uncurry4 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
+uncurry4 f (a,b,c,d) = f a b c d
+
+isElem :: (a -> String) -> [a] -> String -> Bool
+isElem f xs = (`elem` (f <$> xs)) . map toLower

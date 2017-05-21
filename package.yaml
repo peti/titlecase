@@ -1,6 +1,6 @@
 name:           titlecase
-version:        0.1.0.3
-synopsis:       Convert English words to title case
+version:        "1"
+synopsis:       Convert English Words to Title Case
 author:
   - Nikita Karetnikov
   - Peter Simons
@@ -16,14 +16,11 @@ description:    Capitalize all English words except articles (a, an, the),
                 coordinating conjunctions (for, and, nor, but, or, yet, so), and
                 prepositions (unless they begin or end the title).  The
                 prepositions are taken from
-                <https://en.wikipedia.org/wiki/List_of_English_prepositions>.
+                <https://en.wikipedia.org/wiki/List_of_English_prepositions Wikipedia>.
 ghc-options:    -Wall
 
 dependencies:
   - base <5
-  - blaze-markup
-  - semigroups
-  - text
 
 library:
   source-dirs:          src
@@ -39,7 +36,7 @@ executables:
 
 tests:
   test:
-    main:               Test.hs
+    main:               Main.hs
     source-dirs:        tests
     dependencies:
       - titlecase

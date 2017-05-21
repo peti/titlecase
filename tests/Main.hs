@@ -1,8 +1,9 @@
 module Main where
 
-import           Test.Tasty
-import qualified Test.Property as Property
-import qualified Test.Unit     as Unit
+import qualified Property
+import qualified Unit
+
+import Test.Tasty
 
 main :: IO ()
 main = defaultMain tests
