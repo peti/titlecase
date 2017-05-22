@@ -27,6 +27,8 @@ library:
   exposed-modules:
     - Data.Text.Titlecase
     - Data.Text.Titlecase.Internal
+  other-extensions:
+    - MultiWayIf
 
 executables:
   titlecase:
