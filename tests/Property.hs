@@ -4,7 +4,6 @@ import Data.Text.Titlecase
 import Data.Text.Titlecase.Internal
 
 import Data.List as List
-import Data.Semigroup
 import Test.Tasty
 import Test.Tasty.QuickCheck
 
@@ -18,9 +17,9 @@ tests = testGroup "Property tests"
 
 ignoreList :: [String]
 ignoreList =
-     (unArticle     <$> articles)
-  <> (unConjunction <$> conjunctions)
-  <> (unPreposition <$> prepositions)
+     (fmap unArticle     articles)
+  ++ (fmap unConjunction conjunctions)
+  ++ (fmap unPreposition prepositions)
 
 arbitraryText :: Gen String
 arbitraryText = elements ignoreList
