@@ -1,10 +1,8 @@
 # Titlecase Library for Haskell
 
-This library basically offers a rough but mostly working function `titlecase` to
-take any Text string and capitalize it according to English Title Case. While the
-Data.Text function `toTitle` simply capitalizes the first letter of every word,
-this Data.Text.Titlecase `titlecase` function uses the list of common words to
-not capitalize. It then respects the rule of capitalizing the first and last
-words regardless.
+This library offers fairly robust `titlecase` function to capitalize a string
+to English Title Case. Unlike `toTitle` from the `text` library -- which simply
+capitalizes the first letter of every word -- this function respects rules with
+regard to articles, conjunctions, and prepositions.
 
-On Hackage at <https://hackage.haskell.org/package/titlecase>.
+It is available from Hackage at <https://hackage.haskell.org/package/titlecase>.
