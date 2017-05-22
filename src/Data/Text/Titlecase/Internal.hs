@@ -14,14 +14,14 @@ isArticle :: String -> Bool
 isArticle = isElem unArticle articles
 
 articles :: [Article]
-articles = Article <$> ["a", "an", "the"]
+articles = map Article ["a", "an", "the"]
 
 -- * Conjunctions
 
 newtype Conjunction = Conjunction { unConjunction :: String } deriving (Eq, Show)
 
 conjunctions :: [Conjunction]
-conjunctions = Conjunction <$> ["for", "and", "nor", "but", "or", "yet", "so"]
+conjunctions = map Conjunction ["for", "and", "nor", "but", "or", "yet", "so"]
 
 isConjunction :: String -> Bool
 isConjunction = isElem unConjunction conjunctions
@@ -65,7 +65,7 @@ isFourWordPreposition  :: String -> String -> String -> String -> Bool
 isFourWordPreposition a b c d = isElem unPreposition fourWordPrepositions $ unwords [a, b, c, d]
 
 oneWordPrepositions :: [Preposition]
-oneWordPrepositions = OneWordPreposition <$>
+oneWordPrepositions = map OneWordPreposition
   [ "a", "abaft", "abeam", "aboard", "about", "above", "absent", "across"
   , "afore", "against", "along", "alongside", "amid", "amidst"
   , "among", "amongst", "an", "anenst", "apropos", "apud", "around"
@@ -93,7 +93,7 @@ oneWordPrepositions = OneWordPreposition <$>
   ]
 
 twoWordPrepositions :: [Preposition]
-twoWordPrepositions = uncurry TwoWordPreposition <$>
+twoWordPrepositions = map (uncurry TwoWordPreposition)
   [ ("according", "to"), ("ahead", "of"), ("apart", "from"), ("as", "for")
   , ("as", "of"), ("as", "per"), ("as", "regards"), ("aside", "from")
   , ("astern", "of")
@@ -115,7 +115,7 @@ twoWordPrepositions = uncurry TwoWordPreposition <$>
   ]
 
 threeWordPrepositions :: [Preposition]
-threeWordPrepositions = uncurry3 ThreeWordPreposition <$>
+threeWordPrepositions = map (uncurry3 ThreeWordPreposition)
   [ ("as", "opposed", "to")
   , ("as", "well", "as")
   , ("by", "means", "of"), ("by", "virtue", "of")
@@ -128,7 +128,7 @@ threeWordPrepositions = uncurry3 ThreeWordPreposition <$>
   ]
 
 fourWordPrepositions :: [Preposition]
-fourWordPrepositions = uncurry4 FourWordPreposition <$>
+fourWordPrepositions = map (uncurry4 FourWordPreposition)
   [ ("at", "the", "behest", "of")
   , ("for", "the", "sake", "of")
   , ("with", "a", "view", "to")
@@ -153,4 +153,4 @@ uncurry4 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
 uncurry4 f (a,b,c,d) = f a b c d
 
 isElem :: (a -> String) -> [a] -> String -> Bool
-isElem f xs = (`elem` (f <$> xs)) . map toLower
+isElem f xs = (`elem` (fmap f xs)) . map toLower
