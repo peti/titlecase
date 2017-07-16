@@ -4,4 +4,7 @@ import Data.Text.Titlecase
 import System.Environment
 
 main :: IO ()
-main = getArgs >>= putStrLn . titlecase . unwords
+main = getArgs >>= parseArgs >>= putStrLn . titlecase
+  where parseArgs :: [String] -> IO String
+        parseArgs [] = getContents
+        parseArgs xs = return $ unwords xs
