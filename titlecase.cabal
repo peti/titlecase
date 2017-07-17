@@ -1,14 +1,15 @@
--- This file has been generated from package.yaml by hpack version 0.17.0.
+-- This file has been generated from package.yaml by hpack version 0.18.1.
 --
 -- see: https://github.com/sol/hpack
 
 name:                titlecase
-version:             1
+version:             1.0.1
 license:             BSD3
 license-file:        LICENSE
 author:              Nikita Karetnikov,
                      Peter Simons,
-                     Aaron Wolf
+                     Aaron Wolf,
+                     Serg Nesterov
 maintainer:          Peter Simons <simons@cryp.to>
 homepage:            https://github.com/peti/titlecase#readme
 bug-reports:         https://github.com/peti/titlecase/issues
