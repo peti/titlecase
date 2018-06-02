@@ -153,4 +153,4 @@ uncurry4 :: (a -> b -> c -> d -> e) -> (a, b, c, d) -> e
 uncurry4 f (a,b,c,d) = f a b c d
 
 isElem :: (a -> String) -> [a] -> String -> Bool
-isElem f xs = (`elem` (fmap f xs)) . map toLower
+isElem f xs = (`elem` fmap f xs) . map toLower
