@@ -14,7 +14,6 @@ titlecase t = go 1 ws
     ws :: [String]
     ws        = words t
     isFirst i = i == 1
-    isLast  i = i == length ws
 
     go :: Int -> [String] -> String
     go _ []           = ""
@@ -52,7 +51,7 @@ titlecase t = go 1 ws
 
     parse1 i a tt =
       if isOneWordPreposition a || isConjunction a || isArticle a
-      then if isFirst i || isLast i
+      then if isFirst i || null tt
            then toTitle a <#> go (succ i) tt
            else         a <#> go (succ i) tt
       else      toTitle a <#> go (succ i) tt
