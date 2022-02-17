@@ -22,7 +22,7 @@ ignoreList =
   ++ (fmap unPreposition prepositions)
 
 arbitraryText :: Gen String
-arbitraryText = elements ignoreList
+arbitraryText = unwords <$> listOf (elements ignoreList)
 
 sameLength :: TestTree
 sameLength = testProperty "titlecase doesn't change the length" $
