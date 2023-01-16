@@ -17,9 +17,9 @@ tests = testGroup "Property tests"
 
 ignoreList :: [String]
 ignoreList =
-     (fmap unArticle     articles)
-  ++ (fmap unConjunction conjunctions)
-  ++ (fmap unPreposition prepositions)
+     fmap unArticle     articles
+  ++ fmap unConjunction conjunctions
+  ++ fmap unPreposition prepositions
 
 arbitraryText :: Gen String
 arbitraryText = elements ignoreList
