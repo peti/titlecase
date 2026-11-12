@@ -6,10 +6,10 @@ import Data.Text.Titlecase.Internal hiding (articles, conjunctions, prepositions
 
 import Test.Tasty
 import Test.Tasty.HUnit
-import Data.Char ( toLower )
+import Data.Char ( toUpper )
 
 tests :: TestTree
-tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4, issue7]
+tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4, issue7, examples]
 
 issue7 :: TestTree
 issue7 = testGroup "#7: preserve whitespace"
@@ -36,45 +36,44 @@ issue4 = testCase "#4: capitalize final word after a multi-word preposition" $
   titlecase "far from perfect: things to complain about"
     @?= "Far from Perfect: Things to Complain About"
 
-articles :: TestTree
-articles = testGroup "Articles" [articleFirst, articleLast, articleIgnored]
+-- Each phrase is a separate test so failures identify the exact exception.
+articles, conjunctions, prepositions :: TestTree
+articles = exceptionTests "Articles" (map unArticle Titlecase.articles)
+conjunctions = exceptionTests "Conjunctions" (map unConjunction Titlecase.conjunctions)
+prepositions = exceptionTests "Prepositions" (map unPreposition Titlecase.prepositions)
 
-conjunctions :: TestTree
-conjunctions = testGroup "Conjunctions" [conjunctionFirst, conjunctionLast, conjunctionIgnored]
-
-prepositions :: TestTree
-prepositions = testGroup "Prepositions" [prepositionFirst, prepositionLast, prepositionIgnored]
-
-testTitlecase, testFirst, testLast, testIgnored :: String -> Assertion
-testTitlecase t = titlecase (map toLower t) @?= t
-
-toTitleFirst :: String -> String
-toTitleFirst t = unwords $ case words t of
-  []     -> []
-  (x:xs) -> toTitle x : xs
-
-toTitleLast :: String -> String
-toTitleLast t = unwords $ go $ words t
+exceptionTests :: String -> [String] -> TestTree
+exceptionTests label phrases = testGroup label
+  [ testGroup phrase
+      [ testCase "first" $
+          titlecase (phrase ++ " example") @?= capitalize phrase ++ " Example"
+      , testCase "last" $
+          titlecase ("example " ++ phrase) @?= "Example " ++ capitalizeLast phrase
+      , testCase "internal" $
+          titlecase ("example " ++ phrase ++ " example") @?= "Example " ++ phrase ++ " Example"
+      , testCase "whole title" $
+          titlecase phrase @?= capitalize (capitalizeLast phrase)
+      ]
+  | phrase <- phrases
+  ]
   where
-    go []     = []
-    go [x]    = [toTitle x]
-    go (x:xs) = x : go xs
+    capitalize "" = ""
+    capitalize (c:cs) = toUpper c : cs
+    capitalizeLast = unwords . reverse . firstUpper . reverse . words
+    firstUpper [] = []
+    firstUpper (w:ws) = capitalize w : ws
 
-testFirst   t = testTitlecase $ toTitleFirst t <#> "Is First, so It Is Capitalized"
-testLast    t = testTitlecase $ "This Sentence Capitalizes" <#> toTitleLast t
-testIgnored t = testTitlecase $ "This Sentence Keeps" <#> t <#> "As Is"
-
-articleFirst, articleLast, articleIgnored :: TestTree
-articleFirst   = testCase "article is first"   $ mapM_ (testFirst   . unArticle) Titlecase.articles
-articleLast    = testCase "article is last"    $ mapM_ (testLast    . unArticle) Titlecase.articles
-articleIgnored = testCase "article is ignored" $ mapM_ (testIgnored . unArticle) Titlecase.articles
-
-conjunctionFirst, conjunctionLast, conjunctionIgnored :: TestTree
-conjunctionFirst   = testCase "conjunction is first"   $ mapM_ (testFirst   . unConjunction) Titlecase.conjunctions
-conjunctionLast    = testCase "conjunction is last"    $ mapM_ (testLast    . unConjunction) Titlecase.conjunctions
-conjunctionIgnored = testCase "conjunction is ignored" $ mapM_ (testIgnored . unConjunction) Titlecase.conjunctions
-
-prepositionFirst, prepositionLast, prepositionIgnored :: TestTree
-prepositionFirst   = testCase "preposition is first"   $ mapM_ (testFirst   . unPreposition) Titlecase.prepositions
-prepositionLast    = testCase "preposition is last"    $ mapM_ (testLast    . unPreposition) Titlecase.prepositions
-prepositionIgnored = testCase "preposition is ignored" $ mapM_ (testIgnored . unPreposition) Titlecase.prepositions
+examples :: TestTree
+examples = testGroup "Examples"
+  [ testCase label $ titlecase input @?= expected
+  | (label, input, expected) <-
+      [ ("ordinary words and exceptions", "a journey through the world", "A Journey through the World")
+      , ("single article", "the", "The")
+      , ("single ordinary word", "hello", "Hello")
+      , ("preserve existing case", "an iPhone and NASA", "An IPhone and NASA")
+      , ("Unicode initials", "éclair and über", "Éclair and Über")
+      , ("digits", "123 stories", "123 Stories")
+      , ("punctuation preserved", "hello, world!", "Hello, World!")
+      , ("overlapping prepositions", "in front of the house", "In front of the House")
+      ]
+  ]
