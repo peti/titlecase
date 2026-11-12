@@ -9,7 +9,12 @@ import Test.Tasty.HUnit
 import Data.Char ( toLower )
 
 tests :: TestTree
-tests = testGroup "Unit tests" [articles, conjunctions, prepositions]
+tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4]
+
+issue4 :: TestTree
+issue4 = testCase "#4: capitalize final word after a multi-word preposition" $
+  titlecase "far from perfect: things to complain about"
+    @?= "Far from Perfect: Things to Complain About"
 
 articles :: TestTree
 articles = testGroup "Articles" [articleFirst, articleLast, articleIgnored]
