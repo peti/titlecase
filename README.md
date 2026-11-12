@@ -10,4 +10,12 @@ to English Title Case. Unlike `toTitle` from the `text` library -- which simply
 capitalizes the first letter of every word -- this function respects rules with
 regard to articles, conjunctions, and prepositions.
 
+ASCII hyphens separate components that follow the same capitalization rules
+as words. For example, `state-of-the-art design` becomes
+`State-of-the-Art Design`, and `a walk-in` becomes `A Walk-In` because the
+final component ends the title. Internal prepositions stay lowercase:
+`follow-up election` becomes `Follow-up Election`. Existing capitalization,
+whitespace, and hyphens are preserved. En and em dashes are not treated as
+component separators.
+
 It is available from Hackage at <https://hackage.haskell.org/package/titlecase>.

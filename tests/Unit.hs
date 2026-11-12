@@ -9,7 +9,31 @@ import Test.Tasty.HUnit
 import Data.Char ( toUpper )
 
 tests :: TestTree
-tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4, issue7, examples]
+tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4, issue5, issue7, examples]
+
+issue5 :: TestTree
+issue5 = testGroup "#5: hyphenated titles"
+  [ testCase label $ titlecase input @?= expected
+  | (label, input, expected) <-
+      [ ("reported example", "John wins follow-up election", "John Wins Follow-up Election")
+      , ("final up", "a follow-up", "A Follow-Up")
+      , ("internal exceptions", "state-of-the-art design", "State-of-the-Art Design")
+      , ("mother-in-law", "mother-in-law", "Mother-in-Law")
+      , ("final component", "a walk-in", "A Walk-In")
+      , ("internal final component", "a walk-in closet", "A Walk-in Closet")
+      , ("existing case", "non-English text", "Non-English Text")
+      , ("conjunction", "a pick-and-mix selection", "A Pick-and-Mix Selection")
+      , ("first component", "the-art of writing", "The-Art of Writing")
+      , ("multi-word preposition", "in-front-of", "In-front-Of")
+      , ("four-word preposition", "at-the-behest-of", "At-the-behest-Of")
+      , ("mixed separators", "  far-from perfect:\tthings to complain-about ", "  Far-from Perfect:\tThings to Complain-About ")
+      , ("repeated and boundary hyphens", "--the--story-of--", "--The--Story-Of--")
+      , ("hyphens only", " - --\t- ", " - --\t- ")
+      , ("Unicode components", "vis-à-vis", "Vis-À-Vis")
+      , ("en dash is unchanged", "hello–world", "Hello–world")
+      , ("em dash is unchanged", "hello—world", "Hello—world")
+      ]
+  ]
 
 issue7 :: TestTree
 issue7 = testGroup "#7: preserve whitespace"
@@ -40,7 +64,8 @@ issue4 = testCase "#4: capitalize final word after a multi-word preposition" $
 articles, conjunctions, prepositions :: TestTree
 articles = exceptionTests "Articles" (map unArticle Titlecase.articles)
 conjunctions = exceptionTests "Conjunctions" (map unConjunction Titlecase.conjunctions)
-prepositions = exceptionTests "Prepositions" (map unPreposition Titlecase.prepositions)
+-- Hyphenated entries are governed by component rules, tested in issue5.
+prepositions = exceptionTests "Prepositions" (filter (notElem '-') (map unPreposition Titlecase.prepositions))
 
 exceptionTests :: String -> [String] -> TestTree
 exceptionTests label phrases = testGroup label

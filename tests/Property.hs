@@ -15,6 +15,8 @@ tests = testGroup "Property tests"
   , titlecaseIdempotent
   , whitespacePreserved
   , wordContentsPreserved
+  , hyphensPreserved
+  , hyphensSeparateComponents
   , whitespaceDoesNotAffectCapitalization
   ]
 
@@ -31,8 +33,8 @@ arbitraryText = frequency
   [ (3, unwords <$> listOf (elements ignoreList))
   , (7, concat <$> listOf (frequency
       [ (4, elements ignoreList)
-      , (3, elements ["hello", "world", "Perfect", "iPhone", "NASA", "éclair", "über", "123", "follow-up", "\"hello\"", "(world)", "story:", "and,"])
-      , (3, elements [" ", "  ", "\t", "\n", "\r\n", "\160", "\8195", "\t \n"])
+      , (3, elements ["hello", "world", "Perfect", "iPhone", "NASA", "éclair", "über", "123", "follow-up", "state-of-the-art", "in-front-of", "\"hello\"", "(world)", "story:", "and,"])
+      , (3, elements [" ", "  ", "\t", "\n", "\r\n", "\160", "\8195", "\t \n", "-", "--"])
       ]))
   ]
 
@@ -47,14 +49,14 @@ sameLength = testProperty "Titlecase preserves length" $
 
 firstWordCapitalized :: TestTree
 firstWordCapitalized = testProperty "First word is always capitalized" $
-  forText $ \t -> case (words t, words (titlecase t)) of
+  forText $ \t -> case (components t, components (titlecase t)) of
     ([], result) -> result === []
     ((c:cs):_, result:_) -> result === toUpper c : cs
     _ -> counterexample "Missing first word" False
 
 lastWordCapitalized :: TestTree
 lastWordCapitalized = testProperty "Last word is always capitalized" $
-  forText $ \t -> case (reverse (words t), reverse (words (titlecase t))) of
+  forText $ \t -> case (reverse (components t), reverse (components (titlecase t))) of
     ([], result) -> result === []
     ((c:cs):_, result:_) -> result === toUpper c : cs
     _ -> counterexample "Missing last word" False
@@ -70,10 +72,10 @@ whitespacePreserved = testProperty "Whitespace characters keep their positions" 
     in whitespacePositions (titlecase t) === whitespacePositions t
 
 wordContentsPreserved :: TestTree
-wordContentsPreserved = testProperty "Only word-initial characters may change" $
+wordContentsPreserved = testProperty "Only component-initial characters may change" $
   forText $ \t ->
-    let original = words t
-        result = words (titlecase t)
+    let original = components t
+        result = components (titlecase t)
         unchanged inputWord outputWord = case (inputWord, outputWord) of
           (c:cs, d:ds) -> conjoin [cs === ds, property (d == c || d == toUpper c)]
           _ -> counterexample "Unexpected empty word" False
@@ -82,3 +84,17 @@ wordContentsPreserved = testProperty "Only word-initial characters may change" $
 whitespaceDoesNotAffectCapitalization :: TestTree
 whitespaceDoesNotAffectCapitalization = testProperty "Whitespace does not affect capitalization" $
   forText $ \t -> words (titlecase t) === words (titlecase (unwords (words t)))
+
+-- A component ends at either whitespace or an ASCII hyphen.
+components :: String -> [String]
+components = words . map (\c -> if c == '-' then ' ' else c)
+
+hyphensPreserved :: TestTree
+hyphensPreserved = testProperty "Hyphens keep their positions" $
+  forText $ \t ->
+    let positions = filter ((== '-') . snd) . zip [0 :: Int ..]
+    in positions (titlecase t) === positions t
+
+hyphensSeparateComponents :: TestTree
+hyphensSeparateComponents = testProperty "Hyphenated components follow word rules" $
+  forText $ \t -> components (titlecase t) === words (titlecase (unwords (components t)))

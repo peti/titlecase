@@ -8,22 +8,24 @@ import Data.Char ( isSpace )
 -- | Capitalize all English words except 'articles' (a, an, the), coordinating
 -- 'conjunctions' (for, and, nor, but, or, yet, so), and 'prepositions' (unless
 -- they begin or end the title).
--- Whitespace is preserved exactly.
+-- ASCII hyphens separate components, which follow the same rules as words.
+-- Whitespace and hyphens are preserved exactly.
 
 titlecase :: String -> String
-titlecase t = restoreWhitespace t (words (go 1 ws))
+titlecase t = restoreSeparators t (words (go 1 ws))
   where
     -- The parser changes capitalization, but never the number of words.
-    -- Put its output words back between the original whitespace runs.
-    restoreWhitespace :: String -> [String] -> String
-    restoreWhitespace original [] = original
-    restoreWhitespace original (w:rest) =
-      let (spacing, text) = span isSpace original
-          remaining = dropWhile (not . isSpace) text
-      in spacing ++ w ++ restoreWhitespace remaining rest
+    -- Put its output words back between the original separator runs.
+    restoreSeparators :: String -> [String] -> String
+    restoreSeparators original [] = original
+    restoreSeparators original (w:rest) =
+      let (spacing, text) = span isSeparator original
+          remaining = dropWhile (not . isSeparator) text
+      in spacing ++ w ++ restoreSeparators remaining rest
 
     ws :: [String]
-    ws        = words t
+    ws        = words (map (\c -> if c == '-' then ' ' else c) t)
+    isSeparator c = isSpace c || c == '-'
     isFirst i = i == 1
 
     go :: Int -> [String] -> String
