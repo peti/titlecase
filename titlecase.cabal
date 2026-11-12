@@ -19,7 +19,7 @@ description:         Capitalize all English words except articles (a, an, the),
                      so), and prepositions (unless they begin or end the
                      title). The prepositions are taken from
                      <https://en.wikipedia.org/wiki/List_of_English_prepositions Wikipedia>.
-tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5,
+tested-with:         GHC == 8.4.4, GHC == 8.6.5,
                      GHC == 8.8.4, GHC == 8.10.7, GHC == 9.0.2, GHC == 9.2.8,
                      GHC == 9.4.8, GHC == 9.6.7, GHC == 9.8.4, GHC == 9.10.3,
                      GHC == 9.12.4, GHC == 9.14.1
