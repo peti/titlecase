@@ -4,6 +4,7 @@ import Data.Text.Titlecase
 import Data.Text.Titlecase.Internal
 
 import Data.List as List
+import Data.Char ( isSpace )
 import Test.Tasty
 import Test.Tasty.QuickCheck
 
@@ -13,6 +14,7 @@ tests = testGroup "Property tests"
   , firstWordCapitalized
   , lastWordCapitalized
   , titlecaseIdempotent
+  , whitespacePreserved
   ]
 
 ignoreList :: [String]
@@ -43,3 +45,15 @@ lastWordCapitalized = testProperty "Last word is always capitalized" $
 titlecaseIdempotent :: TestTree
 titlecaseIdempotent = testProperty "Applying titlecase twice is the same as doing it once" $
   forAll arbitraryText $ \t -> titlecase (titlecase t) === titlecase t
+
+whitespacePreserved :: TestTree
+whitespacePreserved = testProperty "Whitespace characters keep their positions" $
+  forAllShrink (concat <$> listOf (elements ["foo", "and", "in", "front", "of", " ", "  ", "\t", "\r\n", "\160"])) shrink $ \t ->
+    let whitespacePositions = filter (isSpace . snd) . zip [0 :: Int ..]
+        result = titlecase t
+    in conjoin
+      [ length result === length t
+      , whitespacePositions result === whitespacePositions t
+      , words result === words (titlecase (unwords (words t)))
+      , titlecase result === result
+      ]

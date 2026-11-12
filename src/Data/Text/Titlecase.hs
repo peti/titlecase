@@ -3,14 +3,25 @@
 module Data.Text.Titlecase ( titlecase ) where
 
 import Data.Text.Titlecase.Internal
+import Data.Char ( isSpace )
 
 -- | Capitalize all English words except 'articles' (a, an, the), coordinating
 -- 'conjunctions' (for, and, nor, but, or, yet, so), and 'prepositions' (unless
 -- they begin or end the title).
+-- Whitespace is preserved exactly.
 
 titlecase :: String -> String
-titlecase t = go 1 ws
+titlecase t = restoreWhitespace t (words (go 1 ws))
   where
+    -- The parser changes capitalization, but never the number of words.
+    -- Put its output words back between the original whitespace runs.
+    restoreWhitespace :: String -> [String] -> String
+    restoreWhitespace original [] = original
+    restoreWhitespace original (w:rest) =
+      let (spacing, text) = span isSpace original
+          remaining = dropWhile (not . isSpace) text
+      in spacing ++ w ++ restoreWhitespace remaining rest
+
     ws :: [String]
     ws        = words t
     isFirst i = i == 1

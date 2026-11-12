@@ -9,7 +9,27 @@ import Test.Tasty.HUnit
 import Data.Char ( toLower )
 
 tests :: TestTree
-tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4]
+tests = testGroup "Unit tests" [articles, conjunctions, prepositions, issue4, issue7]
+
+issue7 :: TestTree
+issue7 = testGroup "#7: preserve whitespace"
+  [ testCase label $ titlecase input @?= expected
+  | (label, input, expected) <-
+      [ ("leading spaces", "  foo bar", "  Foo Bar")
+      , ("trailing spaces", "foo bar  ", "Foo Bar  ")
+      , ("repeated spaces", "foo  bar", "Foo  Bar")
+      , ("tab", "foo\tbar", "Foo\tBar")
+      , ("nonbreaking space", "foo\160bar", "Foo\160Bar")
+      , ("newlines", "foo\r\nbar\n", "Foo\r\nBar\n")
+      , ("empty input", "", "")
+      , ("whitespace only", " \t\r\n\160 ", " \t\r\n\160 ")
+      , ("padded boundary words", "\tthe story of\n", "\tThe Story Of\n")
+      , ("two-word preposition", "\tfar  from perfect about\n", "\tFar  from Perfect About\n")
+      , ("three-word preposition", "in\tfront  of", "In\tfront  Of")
+      , ("four-word preposition", "at\tthe\nbehest\160of  ", "At\tthe\nbehest\160Of  ")
+      , ("internal preposition", "a tale in\tfront of us", "A Tale in\tfront of Us")
+      ]
+  ]
 
 issue4 :: TestTree
 issue4 = testCase "#4: capitalize final word after a multi-word preposition" $
