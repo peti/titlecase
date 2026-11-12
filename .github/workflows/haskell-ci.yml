@@ -10,7 +10,7 @@
 #
 # version: 0.19.20261010
 #
-# REGENDATA ("0.19.20261010",["--doctest","github","titlecase.cabal"])
+# REGENDATA ("0.19.20261010",["--doctest","--doctest-version=>0.25","github","titlecase.cabal"])
 #
 name: Haskell-CI
 on:
