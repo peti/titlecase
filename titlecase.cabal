@@ -50,9 +50,9 @@ executable titlecase
     base <5,
     titlecase
 
-test-suite test
+test-suite regression-tests
   type: exitcode-stdio-1.0
-  main-is: Main.hs
+  main-is: regression-tests.hs
   hs-source-dirs:
     tests
   ghc-options: -Wall
